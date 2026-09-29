@@ -149,7 +149,7 @@ body{margin:0;background:var(--black) radial-gradient(#1c1c1c 1px,transparent 1p
 font:14px/1.6 "Fira Mono",ui-monospace,monospace;text-transform:uppercase;letter-spacing:.06em}
 main{max-width:1200px;margin:0 auto;padding:24px 16px 64px}
 header{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--neon);padding:20px 24px}
-header img{height:18px;display:block}.nav{color:var(--neon);text-decoration:none}.nav:hover{text-decoration:underline}
+header img{height:18px;display:block}nav{display:flex;gap:32px}.nav{color:var(--neon);text-decoration:none}.nav:hover{text-decoration:underline}
 .kicker{display:flex;align-items:center;gap:16px;color:var(--neon);margin:56px 0 8px}
 .kicker svg{width:min(360px,50vw);height:24px}
 h1{font:700 clamp(40px,8vw,88px)/1 "New Science","Arial Black",sans-serif;letter-spacing:-.01em;margin:0 0 40px}
@@ -175,7 +175,7 @@ td small{display:block;color:var(--mut);font-size:11px}td b{font-weight:400;colo
 pre{margin:0;padding:16px 20px;border:1px solid var(--line);background:var(--dark);color:var(--neon);text-transform:none;overflow-x:auto;user-select:all}
 footer{color:var(--mut);font-size:11px;letter-spacing:.14em;margin-top:24px}
 </style></head><body><main>
-<header><a href="https://cypherpunk.com"><img src="/wordmark.svg" alt="./cypherpunk"></a><a class="nav" href="https://cypherpunk.com">cypherpunk.com ↗</a></header>
+<header><a href="https://cypherpunk.com"><img src="/wordmark.svg" alt="./cypherpunk"></a><nav><a class="nav" href="https://github.com/cypherpunktech/node-infrastructure">GitHub ↗</a><a class="nav" href="https://cypherpunk.com">cypherpunk.com ↗</a></nav></header>
 <div class="kicker">// Zakura nodes<svg viewBox="0 0 360 24" aria-hidden="true"><path d="M0 4H280L340 20" fill="none" stroke="#0ce700"/><rect x="336" y="16" width="8" height="8" fill="#0ce700"/></svg></div>
 <h1>Cypherpunk infra</h1>
 <div class="stats"><div><small>Nodes healthy</small><b>${healthy}/${rows.length}</b></div><div><small>Fleet tip</small><b>#${num(tip)}</b></div>
