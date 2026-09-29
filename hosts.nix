@@ -13,10 +13,8 @@
     ipv6Gateway = "2604:2dc0:200:15ff:ff:ff:ff:ff";
     # The public NIC (eno1); eno2 is OVH's private network, unplugged.
     mac = "d0:50:99:dd:fc:74";
-    disks = [
-      "/dev/disk/by-id/nvme-Micron_7450_MTFDKCC960TFR_24404BE87314"
-      "/dev/disk/by-id/nvme-Micron_7450_MTFDKCC960TFR_24404BE7C94D"
-    ];
+    disk = "/dev/disk/by-id/nvme-Micron_7450_MTFDKCC960TFR_24404BE87314";
+    # Cold spare: nvme-Micron_7450_MTFDKCC960TFR_24404BE7C94D.
     storage = "archive";
     slot = 6;
   };
