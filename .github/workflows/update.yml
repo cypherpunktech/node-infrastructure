@@ -1,0 +1,57 @@
+# Bumps the flake's inputs, zcash.nix first among them, and lands the bump
+# on main once every host's system builds from it. Nodes pull main at their
+# hour in hosts.nix, so this is how a Zakura release reaches the fleet.
+#
+# 05:23 UTC: after zcash.nix's own daily bump has had time to merge, before
+# the first node's 06:00 slot. No gate but the build: a bump that fails to
+# build never lands, and one that builds but misbehaves reaches the first
+# slot's nodes before the rest, and is reverted on main.
+name: update
+
+on:
+  schedule:
+    - cron: "23 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+
+      - name: Bump
+        id: bump
+        run: |
+          nix flake update 2>&1 | tee update.log
+          if git diff --quiet flake.lock; then
+            echo "nothing to update"; exit 0
+          fi
+          echo "inputs=$(grep -oE "Updated input '[^']+'" update.log | cut -d"'" -f2 | sort -u | paste -sd, -)" >> "$GITHUB_OUTPUT"
+
+      # zakura comes from zcash.nix's cache; without it every run compiles it.
+      - name: Every host builds
+        if: steps.bump.outputs.inputs != ''
+        run: |
+          for host in $(nix eval --json .#nixosConfigurations --apply builtins.attrNames | jq -r '.[]'); do
+            nix build -L --no-link ".#nixosConfigurations.$host.config.system.build.toplevel" \
+              --option extra-substituters https://cypherpunktech.cachix.org \
+              --option extra-trusted-public-keys cypherpunktech.cachix.org-1:WKo2WboMVH8HUtCKNsSFx31YQibaJ2eocruFvAzWgA4=
+          done
+
+      - name: Land on main
+        if: steps.bump.outputs.inputs != ''
+        env:
+          INPUTS: ${{ steps.bump.outputs.inputs }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "update(flake): $INPUTS" flake.lock
+          git push origin HEAD:main
