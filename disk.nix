@@ -1,7 +1,7 @@
 # One disk, one ext4 root, and a bootloader for BIOS and for UEFI alike.
 #
 # No RAID: a node is rebuilt from this repository and a snapshot in about an
-# hour, which is all a mirror would save. hil-1's mdraid root also never
+# hour, which is all a mirror would save. finney's mdraid root also never
 # assembled in the systemd initrd, twice, with nothing left to say why. A
 # host's other disks are cold spares: when the first dies, point `disk` at
 # one and reinstall.

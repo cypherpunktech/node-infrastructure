@@ -36,5 +36,17 @@
           ];
         }
       ) hosts;
+
+      # What the dashboard needs to know about each host: dashboard/deploy.sh.
+      dashboardHosts = builtins.mapAttrs (_: h: {
+        inherit (h)
+          location
+          coordinates
+          storage
+          ipv4
+          ipv6
+          hostKey
+          ;
+      }) hosts;
     };
 }

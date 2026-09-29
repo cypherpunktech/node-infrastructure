@@ -1,0 +1,5 @@
+hosts.json
+.wrangler/
+# Commercial licence: deployed from a local copy, never redistributed here.
+public/fonts/new-science-bold.woff2
+brand/

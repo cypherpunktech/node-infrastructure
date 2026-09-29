@@ -1,0 +1,16 @@
+name = "nodes"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+workers_dev = true
+
+# Logos and fonts; anything not found there falls through to the worker.
+[assets]
+directory = "./public"
+
+[[kv_namespaces]]
+binding = "FLEET"
+id = "333775498e9a4cad8fd06f8b7723baa5"
+
+# The outside view: is each node's P2P port reachable.
+[triggers]
+crons = ["*/5 * * * *"]
