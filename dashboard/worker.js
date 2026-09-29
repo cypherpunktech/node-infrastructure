@@ -183,7 +183,7 @@ footer{color:var(--mut);font-size:11px;letter-spacing:.14em;margin-top:24px}
 <div class="map">${map(rows)}</div>
 <div class="wrap"><table><tr><th>Node</th><th>State</th><th class="n">Height</th><th class="n">Lag</th><th class="n">Peers</th><th>P2P port</th><th>Version</th><th class="n">Disk</th><th>Heartbeat</th></tr>${tr}</table></div>
 <div class="kicker">// Peer with us<svg viewBox="0 0 360 24" aria-hidden="true"><path d="M0 4H280L340 20" fill="none" stroke="#0ce700"/><rect x="336" y="16" width="8" height="8" fill="#0ce700"/></svg></div>
-<p class="note">Add our node cluster to your node's peers:</p>
+<p class="note">Add our Zakura node cluster to your node's peers:</p>
 <pre>${esc(rows.flatMap((r) => [`${r.ipv4}:8233`, `[${r.ipv6}]:8233`]).join("\n"))}</pre>
 <footer>Refreshes every 30s</footer>
 </main></body></html>`;
