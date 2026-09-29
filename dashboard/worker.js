@@ -149,11 +149,11 @@ body{margin:0;background:var(--black) radial-gradient(#1c1c1c 1px,transparent 1p
 font:14px/1.6 "Fira Mono",ui-monospace,monospace;text-transform:uppercase;letter-spacing:.06em}
 main{max-width:1200px;margin:0 auto;padding:24px 16px 64px}
 header{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--neon);padding:20px 24px}
-header img{height:18px;display:block}header span{color:var(--neon)}
+header img{height:18px;display:block}.nav{color:var(--neon);text-decoration:none}.nav:hover{text-decoration:underline}
 .kicker{display:flex;align-items:center;gap:16px;color:var(--neon);margin:56px 0 8px}
 .kicker svg{width:min(360px,50vw);height:24px}
 h1{font:700 clamp(40px,8vw,88px)/1 "New Science","Arial Black",sans-serif;letter-spacing:-.01em;margin:0 0 40px}
-h1 em{font-style:normal;color:var(--neon)}
+h1 sup{font:400 .18em "Fira Mono",monospace;vertical-align:top;margin-left:.1em}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--line)}
 .stats div{padding:16px 20px;border-right:1px solid var(--line)}.stats div:last-child{border-right:0}
 .stats small{display:block;color:var(--mut);font-size:11px;letter-spacing:.14em}.stats b{color:var(--neon);font-weight:400;font-size:16px}
@@ -176,17 +176,17 @@ td small{display:block;color:var(--mut);font-size:11px}td b{font-weight:400;colo
 pre{margin:0;padding:16px 20px;border:1px solid var(--line);background:var(--dark);color:var(--neon);text-transform:none;overflow-x:auto;user-select:all}
 footer{color:var(--mut);font-size:11px;letter-spacing:.14em;margin-top:24px}
 </style></head><body><main>
-<header><img src="/wordmark.svg" alt="./cypherpunk"><span>Nodes</span></header>
-<div class="kicker">// The network<svg viewBox="0 0 360 24" aria-hidden="true"><path d="M0 4H280L340 20" fill="none" stroke="#0ce700"/><rect x="336" y="16" width="8" height="8" fill="#0ce700"/></svg></div>
-<h1>Zakura <em>nodes</em></h1>
+<header><a href="https://cypherpunk.com"><img src="/wordmark.svg" alt="./cypherpunk"></a><a class="nav" href="https://cypherpunk.com">cypherpunk.com ↗</a></header>
+<div class="kicker">// Zcash infrastructure<svg viewBox="0 0 360 24" aria-hidden="true"><path d="M0 4H280L340 20" fill="none" stroke="#0ce700"/><rect x="336" y="16" width="8" height="8" fill="#0ce700"/></svg></div>
+<h1>Cypherpunk nodes<sup>™</sup></h1>
 <div class="stats"><div><small>Nodes healthy</small><b>${healthy}/${rows.length}</b></div><div><small>Fleet tip</small><b>#${num(tip)}</b></div>
 <div><small>Client</small><b>${esc(versions)}</b></div><div><small>P2P</small><b>v1 + v2</b></div></div>
 <div class="map">${map(rows)}</div>
 <div class="wrap"><table><tr><th>Node</th><th>State</th><th class="n">Height</th><th class="n">Lag</th><th class="n">Peers</th><th>P2P port</th><th>Version</th><th class="n">Disk</th><th>Heartbeat</th></tr>${tr}</table></div>
 <div class="kicker">// Peer with us<svg viewBox="0 0 360 24" aria-hidden="true"><path d="M0 4H280L340 20" fill="none" stroke="#0ce700"/><rect x="336" y="16" width="8" height="8" fill="#0ce700"/></svg></div>
-<p class="note">Public Zakura nodes on mainnet. Add them to your node's peers:</p>
+<p class="note">Add our node cluster to your node's peers:</p>
 <pre>${esc(rows.flatMap((r) => [`${r.ipv4}:8233`, `[${r.ipv6}]:8233`]).join("\n"))}</pre>
-<footer>Signed heartbeats every minute · P2P probed every 5 minutes · refreshes every 30s</footer>
+<footer>Refreshes every 30s</footer>
 </main></body></html>`;
 }
 
