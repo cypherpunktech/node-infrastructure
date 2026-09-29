@@ -140,7 +140,7 @@ function page({ tip, rows }) {
     )
     .join("");
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="refresh" content="30"><title>Cypherpunk Nodes</title><link rel="icon" href="/mark.svg" type="image/svg+xml"><style>
+<meta http-equiv="refresh" content="30"><title>Cypherpunk Infra</title><link rel="icon" href="/mark.svg" type="image/svg+xml"><style>
 @font-face{font-family:"New Science";src:url(/fonts/new-science-bold.woff2) format("woff2");font-weight:700;font-display:swap}
 @font-face{font-family:"Fira Mono";src:url(/fonts/fira-mono.woff2) format("woff2");font-display:swap}
 :root{--black:#000;--white:#fff;--neon:#0ce700;--dark:#000500;--deep:#011700;--line:#0ce70066;--mut:#8a8a8a;--bad:#ff4d4d}
@@ -153,7 +153,6 @@ header img{height:18px;display:block}.nav{color:var(--neon);text-decoration:none
 .kicker{display:flex;align-items:center;gap:16px;color:var(--neon);margin:56px 0 8px}
 .kicker svg{width:min(360px,50vw);height:24px}
 h1{font:700 clamp(40px,8vw,88px)/1 "New Science","Arial Black",sans-serif;letter-spacing:-.01em;margin:0 0 40px}
-h1 sup{font:400 .18em "Fira Mono",monospace;vertical-align:top;margin-left:.1em}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--line)}
 .stats div{padding:16px 20px;border-right:1px solid var(--line)}.stats div:last-child{border-right:0}
 .stats small{display:block;color:var(--mut);font-size:11px;letter-spacing:.14em}.stats b{color:var(--neon);font-weight:400;font-size:16px}
@@ -177,8 +176,8 @@ pre{margin:0;padding:16px 20px;border:1px solid var(--line);background:var(--dar
 footer{color:var(--mut);font-size:11px;letter-spacing:.14em;margin-top:24px}
 </style></head><body><main>
 <header><a href="https://cypherpunk.com"><img src="/wordmark.svg" alt="./cypherpunk"></a><a class="nav" href="https://cypherpunk.com">cypherpunk.com ↗</a></header>
-<div class="kicker">// Zcash infrastructure<svg viewBox="0 0 360 24" aria-hidden="true"><path d="M0 4H280L340 20" fill="none" stroke="#0ce700"/><rect x="336" y="16" width="8" height="8" fill="#0ce700"/></svg></div>
-<h1>Cypherpunk nodes<sup>™</sup></h1>
+<div class="kicker">// Zakura nodes<svg viewBox="0 0 360 24" aria-hidden="true"><path d="M0 4H280L340 20" fill="none" stroke="#0ce700"/><rect x="336" y="16" width="8" height="8" fill="#0ce700"/></svg></div>
+<h1>Cypherpunk infra</h1>
 <div class="stats"><div><small>Nodes healthy</small><b>${healthy}/${rows.length}</b></div><div><small>Fleet tip</small><b>#${num(tip)}</b></div>
 <div><small>Client</small><b>${esc(versions)}</b></div><div><small>P2P</small><b>v1 + v2</b></div></div>
 <div class="map">${map(rows)}</div>
