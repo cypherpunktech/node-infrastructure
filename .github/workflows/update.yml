@@ -54,4 +54,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "update(flake): $INPUTS" flake.lock
+          # main may have moved during the build; the bump only touches
+          # flake.lock, so it replays onto whatever landed meanwhile.
+          git pull --rebase origin main
           git push origin HEAD:main
