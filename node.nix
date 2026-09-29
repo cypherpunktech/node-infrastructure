@@ -49,8 +49,16 @@ in
     }
   ];
 
-  # Logs live in RAM and go nowhere: nothing on disk to subpoena or leak.
-  services.journald.storage = "volatile";
+  # Logs stay on this machine, briefly: enough to read why a boot failed,
+  # too little to be an archive worth subpoenaing. Zakura already redacts
+  # peer addresses in them.
+  services.journald.extraConfig = ''
+    SystemMaxUse=500M
+    MaxRetentionSec=3day
+  '';
+  # A root shell on the KVM console when boot fails. Whoever can open that
+  # console already controls the OVH account, and with it rescue mode.
+  boot.initrd.systemd.emergencyAccess = true;
 
   nix.settings.experimental-features = [
     "nix-command"

@@ -67,6 +67,10 @@ in
   };
   # mdmonitor refuses to start without somewhere to report to.
   boot.swraid.mdadmConf = "MAILADDR root";
+  # Loaded, not merely available: the array never assembled on first boot
+  # with raid1 left to on-demand loading, and nixpkgs' own systemd-initrd
+  # RAID test loads its level the same way.
+  boot.initrd.kernelModules = [ "raid1" ];
   boot.initrd.availableKernelModules = [
     "nvme"
     "ahci"
