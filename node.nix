@@ -168,9 +168,12 @@ in
         --arg ready "$(curl -s -o /dev/null -w '%{http_code}' -m 5 http://127.0.0.1:8080/ready)" \
         --arg restoring "$(test -d $state/snapshot && echo true || echo false)" \
         --arg disk "$(df --output=pcent / | tail -1 | tr -d ' ')" \
+        --arg since "$(systemctl show -p ActiveEnterTimestampMonotonic --value zakura-mainnet)" \
+        --arg now "$(cut -d' ' -f1 /proc/uptime)" \
         '{host: $host, time: (now | floor), height: $chain.blocks, tip: $chain.bestblockhash,
           peers: ($peers | length?), version: $info.subversion, ready: ($ready == "200"),
-          restoring: ($restoring == "true"), disk: $disk}')
+          restoring: ($restoring == "true"), disk: $disk,
+          up: (($now | tonumber) - ($since | tonumber) / 1e6 | floor)}')
       sig=$(printf %s "$body" | ssh-keygen -q -Y sign -f /etc/ssh/ssh_host_ed25519_key -n fleet-heartbeat -)
       curl -sf -m 10 https://nodes.cypherpunk-fleet.workers.dev/beat \
         --json "$(jq -nc --arg body "$body" --arg sig "$sig" '{body: $body, sig: $sig}')"

@@ -96,7 +96,9 @@ async function status(env) {
     // which is the whole network pausing (a 75 s average gap runs past five
     // minutes for 2% of blocks), not this node, and flipped every node to
     // degraded at once.
-    r.state = !r.beat || r.age > STALE ? "down" : r.beat.restoring ? "restoring" : r.lag <= 2 && r.p2p?.open ? "ok" : "degraded";
+    // Starting: its daily upgrade or a restart has Zakura reopening its
+    // database, which takes a minute or two; the heartbeat says since when.
+    r.state = !r.beat || r.age > STALE ? "down" : r.beat.restoring ? "restoring" : r.beat.height == null && r.beat.up < 300 ? "starting" : r.lag <= 2 && r.p2p?.open ? "ok" : "degraded";
   }
   return { tip, rows };
 }
@@ -202,7 +204,7 @@ h1{font:700 clamp(40px,8vw,88px)/1 "New Science","Arial Black",sans-serif;letter
 .pin circle{fill:var(--neon)}.pin text{fill:var(--neon);font-size:1.5px;letter-spacing:.05em}
 .pin .ring{fill:none;stroke:var(--neon);stroke-width:.2;animation:pulse 2s ease-out infinite;transform-box:fill-box;transform-origin:center}
 .pin.down circle{fill:var(--bad)}.pin.down .ring{stroke:var(--bad)}.pin.down text{fill:var(--bad)}
-.pin.restoring circle,.pin.degraded circle{fill:var(--white)}.pin.restoring .ring,.pin.degraded .ring{stroke:var(--white)}.pin.restoring text,.pin.degraded text{fill:var(--white)}
+.pin.restoring circle,.pin.starting circle,.pin.degraded circle{fill:var(--white)}.pin.restoring .ring,.pin.degraded .ring{stroke:var(--white)}.pin.restoring text,.pin.degraded text{fill:var(--white)}
 @keyframes pulse{from{transform:scale(1);opacity:1}to{transform:scale(3);opacity:0}}
 @media (prefers-reduced-motion:reduce){.pin .ring{animation:none}}
 .wrap{overflow-x:auto;border:1px solid var(--line)}
@@ -210,7 +212,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:14px 16p
 tr:last-child td{border-bottom:0}th{color:var(--mut);font-weight:400;font-size:11px;letter-spacing:.14em}
 td small{display:block;color:var(--mut);font-size:11px}td b{font-weight:400;color:var(--neon)}.n{text-align:right;font-variant-numeric:tabular-nums}
 .dot{display:inline-block;width:8px;height:8px;margin-right:8px;background:var(--neon)}
-.down .dot{background:var(--bad)}.restoring .dot,.degraded .dot{background:var(--white)}
+.down .dot{background:var(--bad)}.restoring .dot,.starting .dot,.degraded .dot{background:var(--white)}
 .note{color:var(--mut);margin:0 0 12px}
 pre{margin:0;padding:16px 20px;border:1px solid var(--line);background:var(--dark);color:var(--neon);text-transform:none;overflow-x:auto;user-select:all}
 footer{display:flex;align-items:center;justify-content:space-between;color:var(--mut);font-size:11px;letter-spacing:.14em;margin-top:24px}
