@@ -41,6 +41,18 @@ in
     MulticastDNS = "false";
   };
 
+  # Per source address, before Zakura or sshd ever accept: at most 4 open
+  # P2P connections, and new ones to P2P or SSH at 10 a minute after a burst
+  # of 20. Peers reconnect rarely; a flood from one address stops here. P2P
+  # v2 is UDP and throttled inside Zakura instead, where QUIC is understood.
+  networking.firewall.extraCommands = ''
+    ip46tables -I nixos-fw -p tcp -m multiport --dports 22,8233 -m conntrack --ctstate NEW \
+      -m hashlimit --hashlimit-above 10/minute --hashlimit-burst 20 \
+      --hashlimit-mode srcip --hashlimit-name newconn -j DROP
+    ip46tables -I nixos-fw -p tcp --dport 8233 -m conntrack --ctstate NEW \
+      -m connlimit --connlimit-above 4 -j DROP
+  '';
+
   services.openssh = {
     enable = true;
     settings = {
