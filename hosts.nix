@@ -9,7 +9,7 @@
 # slot:    the UTC hour the node pulls updates. Staggered, so a bad release
 #          reaches one slot's nodes and can be reverted before the next.
 #
-# Each node is named after a cypherpunk. Taken: finney, may. Next up:
+# Each node is named after a cypherpunk. Taken: finney. Next up: may,
 # hughes, chaum, szabo, dai, back, zimmermann, diffie, milhon, gilmore.
 {
   finney = {
@@ -32,22 +32,4 @@
     slot = 6;
   };
 
-  may = {
-    # OVH SYS-3, three 4 TB hard drives: pruned, so its 12 GiB database
-    # lives in the page cache and the disks barely matter.
-    location = "Vint Hill, US East";
-    coordinates = [
-      38.75
-      (-77.67)
-    ];
-    hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICFdJ6FyNN39UMchE7ouZa3R1iTN+g00M8MlvcMyxRn9";
-    ipv4 = "51.81.46.3";
-    ipv6 = "2604:2dc0:100:2003::1";
-    ipv6Gateway = "2604:2dc0:100:20ff:ff:ff:ff:ff";
-    mac = "d0:50:99:d6:c6:cc";
-    disk = "/dev/disk/by-id/ata-HGST_HUS726T4TALA6L1_V6JHZYKS";
-    # Cold spares: ata-HGST_HUS726T4TALA6L1_V6G0Y7YN, _V6JHPEWS.
-    storage = "pruned";
-    slot = 8;
-  };
 }
