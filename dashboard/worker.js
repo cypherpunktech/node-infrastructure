@@ -116,13 +116,48 @@ const dots = land.rows
   .join("");
 const at = ([lat, lon]) => [(lon + 180) / land.step, (land.top - lat) / land.step + 0.5];
 
+// Labels go where they overlap nothing already drawn: to the right of the
+// pin if that is free, else left, above, below, then the diagonals. Nodes
+// sit close together (London, Paris, Frankfurt are a few cells apart), and
+// the first free spot keeps every name readable without a legend.
+const CHAR = 0.95; // label glyph width in grid cells, at the 1.5-cell font
+const SPOTS = [
+  [1.8, 0.6, "start"],
+  [-1.8, 0.6, "end"],
+  [0, -1.8, "middle"],
+  [0, 3, "middle"],
+  [1.8, -1.6, "start"],
+  [-1.8, -1.6, "end"],
+  [1.8, 2.8, "start"],
+  [-1.8, 2.8, "end"],
+];
+
+function labels(points) {
+  const boxes = points.map(({ x, y }) => [x - 1.2, y - 1.2, x + 1.2, y + 1.2]);
+  const hit = (a) => boxes.some((b) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3]);
+  return points.map(({ x, y, name }) => {
+    const w = name.length * CHAR;
+    const box = ([dx, dy, anchor]) => {
+      const left = anchor === "start" ? x + dx : anchor === "end" ? x + dx - w : x + dx - w / 2;
+      return [left, y + dy - 1.2, left + w, y + dy + 0.3];
+    };
+    const spot = SPOTS.find((s) => !hit(box(s))) ?? SPOTS[0];
+    boxes.push(box(spot));
+    return { tx: x + spot[0], ty: y + spot[1], anchor: spot[2] };
+  });
+}
+
 function map(rows) {
-  const pins = rows
-    .map((r) => {
-      const [x, y] = at(r.coordinates);
-      return `<g class="pin ${r.state}"><circle class="ring" cx="${x}" cy="${y}" r="1.2"/><circle cx="${x}" cy="${y}" r="0.9"/>
-<text x="${x + 1.8}" y="${y + 0.6}">${esc(r.name)}</text></g>`;
-    })
+  const points = rows.map((r) => {
+    const [x, y] = at(r.coordinates);
+    return { x, y, name: r.name, state: r.state };
+  });
+  const placed = labels(points);
+  const pins = points
+    .map(
+      (p, i) => `<g class="pin ${p.state}"><circle class="ring" cx="${p.x}" cy="${p.y}" r="1.2"/><circle cx="${p.x}" cy="${p.y}" r="0.9"/>
+<text x="${placed[i].tx}" y="${placed[i].ty}" text-anchor="${placed[i].anchor}">${esc(p.name)}</text></g>`,
+    )
     .join("");
   return `<svg viewBox="0 0 ${COLS} ${land.rows.length}" role="img" aria-label="Map of node locations">
 <path class="land" d="${dots}"/>${pins}</svg>`;
