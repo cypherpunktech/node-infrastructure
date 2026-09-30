@@ -39,7 +39,7 @@
       38.75
       (-77.67)
     ];
-    hostKey = "";
+    hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKMF3aetu5cAV129uoouuxWjcsk2pxQ50WkzqXTPSayR";
     ipv4 = "135.148.169.201";
     ipv6 = "2604:2dc0:100:46c9::1";
     ipv6Gateway = "2604:2dc0:100:46ff:ff:ff:ff:ff";
