@@ -18,13 +18,18 @@ in
   system.stateVersion = "26.05";
   networking.hostName = name;
 
-  # IPv4 by DHCP, as OVH hands it out; IPv6 is static, and its gateway sits
-  # outside the /64, so the route has to be declared on-link.
+  # IPv4 by DHCP everywhere. IPv6 as the provider hands it out: OVH gives a
+  # /64 and a gateway outside it, declared on-link (a host with
+  # ipv6Gateway); Vultr advertises both, so the address and route come from
+  # router advertisements.
   networking.useNetworkd = true;
   networking.useDHCP = false;
   systemd.network.networks."10-uplink" = {
     matchConfig.MACAddress = host.mac;
     networkConfig.DHCP = "ipv4";
+    networkConfig.IPv6AcceptRA = !(host ? ipv6Gateway);
+  }
+  // lib.optionalAttrs (host ? ipv6Gateway) {
     address = [ "${host.ipv6}/64" ];
     routes = [
       {

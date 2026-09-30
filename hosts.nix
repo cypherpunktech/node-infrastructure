@@ -9,8 +9,8 @@
 # slot:    the UTC hour the node pulls updates. Staggered, so a bad release
 #          reaches one slot's nodes and can be reverted before the next.
 #
-# Each node is named after a cypherpunk. Taken: finney, may. Next up:
-# hughes, chaum, szabo, dai, back, zimmermann, diffie, milhon, gilmore.
+# Each node is named after a cypherpunk. Taken: finney, may, hughes, chaum. Next up:
+# szabo, dai, back, zimmermann, diffie, milhon, gilmore.
 {
   finney = {
     # OVH SYS-3.
@@ -48,5 +48,22 @@
     # Cold spare: nvme-SAMSUNG_MZQLB960HAJR-00007_S437NC0R703860.
     storage = "archive";
     slot = 8;
+  };
+
+  hughes = {
+    # Vultr bare metal, E-2286G. IPv6 by router advertisement.
+    location = "Paris, France";
+    coordinates = [
+      48.86
+      2.35
+    ];
+    hostKey = "";
+    ipv4 = "217.69.4.15";
+    ipv6 = "2001:19f0:6801:1ad8:3eec:efff:febc:8da4";
+    mac = "3c:ec:ef:bc:8d:a4";
+    disk = "/dev/disk/by-id/ata-INTEL_SSDSC2KG960G8_PHYG144400BL960CGN";
+    # Cold spare: ata-INTEL_SSDSC2KG960G8_PHYG1444001Y960CGN.
+    storage = "archive";
+    slot = 10;
   };
 }
