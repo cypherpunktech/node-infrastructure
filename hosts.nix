@@ -74,7 +74,7 @@
       1.35
       103.82
     ];
-    hostKey = "";
+    hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMw2fMc/nE8e1nBByzhc6pI0r2lB7+Ot529HQfnNyLdr";
     ipv4 = "45.32.111.221";
     ipv6 = "2401:c080:1400:684d:3eec:efff:feb9:c940";
     mac = "3c:ec:ef:b9:c9:40";
