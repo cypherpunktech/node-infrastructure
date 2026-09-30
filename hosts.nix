@@ -66,4 +66,21 @@
     storage = "archive";
     slot = 10;
   };
+
+  chaum = {
+    # Vultr bare metal, E-2286G. IPv6 by router advertisement.
+    location = "Singapore";
+    coordinates = [
+      1.35
+      103.82
+    ];
+    hostKey = "";
+    ipv4 = "45.32.111.221";
+    ipv6 = "2401:c080:1400:684d:3eec:efff:feb9:c940";
+    mac = "3c:ec:ef:b9:c9:40";
+    disk = "/dev/disk/by-id/ata-INTEL_SSDSC2KG960G8_PHYG1261000N960CGN";
+    # Cold spare: ata-INTEL_SSDSC2KG960G8_PHYG126101YB960CGN.
+    storage = "archive";
+    slot = 12;
+  };
 }
