@@ -232,11 +232,16 @@ export default {
     if (pathname === "/") return new Response(page(await status(env)), { headers: { "content-type": "text/html; charset=utf-8" } });
     return new Response("not found", { status: 404 });
   },
+  // Writes only when a port opens or closes: KV bills writes, and a probe
+  // that finds what the last one found says nothing new. `time` is when the
+  // state began, not when it was last confirmed.
   async scheduled(_event, env) {
     await Promise.all(
-      Object.entries(hosts).map(async ([name, h]) =>
-        env.FLEET.put(`probe:${name}`, JSON.stringify({ open: await probe(h.ipv4, 8233), time: Math.round(Date.now() / 1000) })),
-      ),
+      Object.entries(hosts).map(async ([name, h]) => {
+        const open = await probe(h.ipv4, 8233);
+        const last = JSON.parse((await env.FLEET.get(`probe:${name}`)) || "null");
+        if (last?.open !== open) await env.FLEET.put(`probe:${name}`, JSON.stringify({ open, time: Math.round(Date.now() / 1000) }));
+      }),
     );
   },
 };
