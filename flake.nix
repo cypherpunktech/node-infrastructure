@@ -46,9 +46,9 @@
           coordinates
           storage
           ipv4
-          ipv6
           hostKey
           ;
+        ipv6 = h.ipv6 or null;
       }) (nixpkgs.lib.filterAttrs (_: h: h.hostKey != "") hosts);
     };
 }

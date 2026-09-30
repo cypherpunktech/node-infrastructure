@@ -9,8 +9,8 @@
 # slot:    the UTC hour the node pulls updates. Staggered, so a bad release
 #          reaches one slot's nodes and can be reverted before the next.
 #
-# Each node is named after a cypherpunk. Taken: finney, may, hughes, chaum, szabo. Next
-# up: dai, back, zimmermann, diffie, milhon, gilmore.
+# Each node is named after a cypherpunk. Taken: finney, may, hughes, chaum, szabo, dai, cohen,
+# zimmermann, diffie, sassaman, gilmore, back, milhon, barlow, hellman.
 {
   finney = {
     # OVH SYS-3.
@@ -99,5 +99,155 @@
     # Cold spare: ata-INTEL_SSDSC2KG960G8_PHYG1446005U960CGN.
     storage = "archive";
     slot = 14;
+  };
+
+  dai = {
+    # Google Cloud e2-medium, IPv4 only for now.
+    location = "Tokyo, Japan";
+    coordinates = [
+      35.68
+      139.69
+    ];
+    hostKey = "";
+    ipv4 = "34.104.226.177";
+    mac = "42:01:0a:92:00:02";
+    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    storage = "pruned";
+    slot = 16;
+  };
+
+  cohen = {
+    # Google Cloud e2-medium, IPv4 only for now.
+    location = "Mumbai, India";
+    coordinates = [
+      19.08
+      72.88
+    ];
+    hostKey = "";
+    ipv4 = "35.244.47.80";
+    mac = "42:01:0a:a0:00:02";
+    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    storage = "pruned";
+    slot = 18;
+  };
+
+  zimmermann = {
+    # Google Cloud e2-medium, IPv4 only for now.
+    location = "Sydney, Australia";
+    coordinates = [
+      (-33.87)
+      151.21
+    ];
+    hostKey = "";
+    ipv4 = "34.151.153.36";
+    mac = "42:01:0a:98:00:02";
+    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    storage = "pruned";
+    slot = 20;
+  };
+
+  diffie = {
+    # Google Cloud e2-medium, IPv4 only for now.
+    location = "Johannesburg, South Africa";
+    coordinates = [
+      (-26.2)
+      28.05
+    ];
+    hostKey = "";
+    ipv4 = "34.35.70.171";
+    mac = "42:01:0a:da:00:02";
+    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    storage = "pruned";
+    slot = 22;
+  };
+
+  sassaman = {
+    # Google Cloud e2-medium, IPv4 only for now.
+    location = "Frankfurt, Germany";
+    coordinates = [
+      50.11
+      8.68
+    ];
+    hostKey = "";
+    ipv4 = "34.185.255.47";
+    mac = "42:01:0a:9c:00:02";
+    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    storage = "pruned";
+    slot = 0;
+  };
+
+  gilmore = {
+    # Google Cloud e2-medium, IPv4 only for now.
+    location = "Toronto, Canada";
+    coordinates = [
+      43.65
+      (-79.38)
+    ];
+    hostKey = "";
+    ipv4 = "34.130.110.3";
+    mac = "42:01:0a:bc:00:02";
+    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    storage = "pruned";
+    slot = 2;
+  };
+
+  back = {
+    # Google Cloud e2-medium, IPv4 only for now.
+    location = "London, UK";
+    coordinates = [
+      51.51
+      (-0.13)
+    ];
+    hostKey = "";
+    ipv4 = "34.39.40.194";
+    mac = "42:01:0a:9a:00:02";
+    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    storage = "pruned";
+    slot = 4;
+  };
+
+  milhon = {
+    # Google Cloud e2-medium, IPv4 only for now.
+    location = "Hong Kong";
+    coordinates = [
+      22.32
+      114.17
+    ];
+    hostKey = "";
+    ipv4 = "34.92.10.23";
+    mac = "42:01:0a:aa:00:02";
+    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    storage = "pruned";
+    slot = 7;
+  };
+
+  barlow = {
+    # Google Cloud e2-medium, IPv4 only for now.
+    location = "Doha, Qatar";
+    coordinates = [
+      25.29
+      51.53
+    ];
+    hostKey = "";
+    ipv4 = "34.18.77.126";
+    mac = "42:01:0a:d4:00:02";
+    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    storage = "pruned";
+    slot = 9;
+  };
+
+  hellman = {
+    # Google Cloud e2-medium, IPv4 only for now.
+    location = "Querétaro, Mexico";
+    coordinates = [
+      20.59
+      (-100.39)
+    ];
+    hostKey = "";
+    ipv4 = "34.51.89.91";
+    mac = "42:01:0a:e0:00:02";
+    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    storage = "pruned";
+    slot = 11;
   };
 }

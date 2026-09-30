@@ -45,7 +45,11 @@
     efiSupport = true;
     efiInstallAsRemovable = true;
   };
+  # Bare metal's disk controllers, and virtio for cloud VMs.
   boot.initrd.availableKernelModules = [
+    "virtio_pci"
+    "virtio_scsi"
+    "virtio_blk"
     "nvme"
     "ahci"
     "xhci_pci"

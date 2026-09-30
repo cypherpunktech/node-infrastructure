@@ -15,6 +15,12 @@ let
 in
 {
   nixpkgs.hostPlatform = "x86_64-linux";
+  # Boot messages on the serial port too: Google Cloud's serial log and
+  # OVH's Serial-over-LAN can then show why a machine did not come up.
+  boot.kernelParams = [
+    "console=ttyS0,115200n8"
+    "console=tty0"
+  ];
   system.stateVersion = "26.05";
   networking.hostName = name;
 
@@ -28,6 +34,8 @@ in
     matchConfig.MACAddress = host.mac;
     networkConfig.DHCP = "ipv4";
     networkConfig.IPv6AcceptRA = !(host ? ipv6Gateway);
+    # Google Cloud's network is 1460 bytes and says so only over DHCP.
+    dhcpV4Config.UseMTU = true;
   }
   // lib.optionalAttrs (host ? ipv6Gateway) {
     address = [ "${host.ipv6}/64" ];
