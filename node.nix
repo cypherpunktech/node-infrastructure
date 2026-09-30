@@ -157,7 +157,9 @@ in
   # build or eval leaves the running system as it was.
   system.autoUpgrade = {
     enable = true;
-    flake = "github:cypherpunktech/node-infrastructure";
+    # By name, not by hostname: a renamed host keeps its old hostname until
+    # it reboots, and would look itself up under the old name until then.
+    flake = "github:cypherpunktech/node-infrastructure#${name}";
     dates = "*-*-* ${lib.fixedWidthNumber 2 host.slot}:00:00 UTC";
     randomizedDelaySec = "30min";
   };
