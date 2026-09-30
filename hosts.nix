@@ -108,7 +108,7 @@
       35.68
       139.69
     ];
-    hostKey = "";
+    hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPR7SLVULJZrCtTv3woVSRujg7eZ6Z0pUEDcxDVE94Ca";
     ipv4 = "34.104.226.177";
     mac = "42:01:0a:92:00:02";
     disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
@@ -123,7 +123,7 @@
       19.08
       72.88
     ];
-    hostKey = "";
+    hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC4OnkFdaRMroueZtudZ7QzoQ8CNQ2ZmXi9x8TCFRSKF";
     ipv4 = "35.244.47.80";
     mac = "42:01:0a:a0:00:02";
     disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
@@ -138,7 +138,7 @@
       (-33.87)
       151.21
     ];
-    hostKey = "";
+    hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPWMIlKK6Ai3RDoW8oMP5pfcCZGty9OOF4FBmol72HSb";
     ipv4 = "34.151.153.36";
     mac = "42:01:0a:98:00:02";
     disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
@@ -153,7 +153,7 @@
       (-26.2)
       28.05
     ];
-    hostKey = "";
+    hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE80ILdz+eRpr0FOskEud2lbyfbG+vnIojZ6f5cWb/8e";
     ipv4 = "34.35.70.171";
     mac = "42:01:0a:da:00:02";
     disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
@@ -168,7 +168,7 @@
       50.11
       8.68
     ];
-    hostKey = "";
+    hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGYYwF5tk6xYlq582oRdUKBUzCZqfpnISv/kaduyrF+B";
     ipv4 = "34.185.255.47";
     mac = "42:01:0a:9c:00:02";
     disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
@@ -183,7 +183,7 @@
       43.65
       (-79.38)
     ];
-    hostKey = "";
+    hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxDH6cMxmf2D3H8CJPqO6wdJtQddzcu11hrOsCRTnGx";
     ipv4 = "34.130.110.3";
     mac = "42:01:0a:bc:00:02";
     disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
@@ -198,7 +198,7 @@
       51.51
       (-0.13)
     ];
-    hostKey = "";
+    hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILLSjBP/lMKwpi96nkdqjLl80aPYI+4UVRczamNsDpde";
     ipv4 = "34.39.40.194";
     mac = "42:01:0a:9a:00:02";
     disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
@@ -213,7 +213,7 @@
       22.32
       114.17
     ];
-    hostKey = "";
+    hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILnet2jKRXC80qWEyRoTLE4jpYb/DMkAnGmC8RWbvuWv";
     ipv4 = "34.92.10.23";
     mac = "42:01:0a:aa:00:02";
     disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
@@ -228,7 +228,7 @@
       25.29
       51.53
     ];
-    hostKey = "";
+    hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICNjizb8uitelBv3MrGP622YhFb+/IIhV6eK2u/0Ja0G";
     ipv4 = "34.18.77.126";
     mac = "42:01:0a:d4:00:02";
     disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
@@ -243,7 +243,7 @@
       20.59
       (-100.39)
     ];
-    hostKey = "";
+    hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ+w5rkgyeOgzNFq9F2NkYlnsvwDahON0WiUDG9rXTGN";
     ipv4 = "34.51.89.91";
     mac = "42:01:0a:e0:00:02";
     disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
