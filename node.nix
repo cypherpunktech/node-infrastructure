@@ -5,6 +5,7 @@
   pkgs,
   name,
   host,
+  hosts,
   ...
 }:
 let
@@ -109,6 +110,20 @@ in
         # Both stacks: v2 with the peers that speak it, legacy for the rest.
         p2p_stack = "dual";
         external_addr = "${host.ipv4}:8233";
+        # Setting this replaces Zakura's list rather than adding to it, so
+        # its four seeders (zakura-network config.rs, 1.5.0) come first, then
+        # every other node of the fleet, dialled on every start.
+        initial_mainnet_peers = [
+          "dnsseed.str4d.xyz:8233"
+          "dnsseed.z.cash:8233"
+          "mainnet.seeder.shieldedinfra.net:8233"
+          "mainnet.seeder.zfnd.org:8233"
+        ]
+        ++ lib.concatLists (
+          lib.mapAttrsToList (_: h: [ "${h.ipv4}:8233" ] ++ lib.optional (h ? ipv6) "[${h.ipv6}]:8233") (
+            lib.filterAttrs (n: _: n != name) hosts
+          )
+        );
       };
       state.storage_mode = host.storage;
       health.listen_addr = "127.0.0.1:8080";
