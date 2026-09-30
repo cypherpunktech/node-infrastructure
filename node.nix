@@ -99,6 +99,10 @@ in
       };
       state.storage_mode = host.storage;
       health.listen_addr = "127.0.0.1:8080";
+      # /ready estimates the tip from the time since the last block, so a
+      # four-minute gap (4% of blocks at 75 s) reads as three behind while
+      # the node sits on the tip. Five tolerates all but <1% of honest gaps.
+      health.ready_max_blocks_behind = 5;
       # Loopback, cookie-authenticated: for the heartbeat below, and for us
       # over SSH. The firewall never opens it.
       rpc.listen_addr = "127.0.0.1:8232";
@@ -120,7 +124,10 @@ in
       state=/var/lib/zakura-mainnet
       # null while the node cannot answer, e.g. during a snapshot restore.
       rpc() {
-        r=$(curl -sf -m 5 -u "$(cat $state/.cookie 2>/dev/null)" -H 'content-type: application/json' \
+        # No cookie until the node first starts; an empty -u makes curl prompt.
+        auth=()
+        [ -r $state/.cookie ] && auth=(-u "$(cat $state/.cookie)")
+        r=$(curl -sf -m 5 "''${auth[@]}" -H 'content-type: application/json' \
           --data "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"$1\",\"params\":[]}" \
           http://127.0.0.1:8232 | jq -c .result) || true
         echo "''${r:-null}"
