@@ -89,8 +89,12 @@ async function status(env) {
     }),
   );
   const tip = Math.max(0, ...rows.map((r) => r.beat?.height ?? 0));
+  // Lag against the tip as the fleet knew it when this node reported, not
+  // against whatever arrived since: heartbeats are a minute apart, and a
+  // block landing in between made a node on the tip look behind.
+  const tipAt = (time) => Math.max(0, ...rows.filter((o) => o.beat?.height != null && o.beat.time <= time + 30).map((o) => o.beat.height));
   for (const r of rows) {
-    r.lag = r.beat?.height != null ? tip - r.beat.height : null;
+    r.lag = r.beat?.height != null ? Math.max(0, tipAt(r.beat.time) - r.beat.height) : null;
     // Healthy means on the fleet's tip and reachable. Zakura's own /ready
     // is not used: it also fails when the last block is five minutes old,
     // which is the whole network pausing (a 75 s average gap runs past five
