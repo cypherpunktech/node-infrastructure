@@ -16,8 +16,8 @@ Status: [nodes.cypherpunk-fleet.workers.dev](https://nodes.cypherpunk-fleet.work
 | `disk.nix`   | Disk layout.                                                               |
 | `dashboard/` | The status page, a Cloudflare Worker fed by heartbeats each node signs.    |
 
-Every day a job bumps the flake's inputs, zcash.nix among them, and lands the bump once every
-host builds. Nodes pull `main` at their hour in `hosts.nix` and switch to it; reverting a commit
+Every hour a job bumps the flake's inputs, zcash.nix to its newest commit that passed CI, and
+lands the bump once every host builds. Nodes pull `main` at their hour in `hosts.nix` and switch to it; reverting a commit
 rolls them back.
 
 ## Adding a node
