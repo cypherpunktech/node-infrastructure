@@ -91,7 +91,12 @@ async function status(env) {
   const tip = Math.max(0, ...rows.map((r) => r.beat?.height ?? 0));
   for (const r of rows) {
     r.lag = r.beat?.height != null ? tip - r.beat.height : null;
-    r.state = !r.beat || r.age > STALE ? "down" : r.beat.restoring ? "restoring" : r.beat.ready && r.p2p?.open ? "ok" : "degraded";
+    // Healthy means on the fleet's tip and reachable. Zakura's own /ready
+    // is not used: it also fails when the last block is five minutes old,
+    // which is the whole network pausing (a 75 s average gap runs past five
+    // minutes for 2% of blocks), not this node, and flipped every node to
+    // degraded at once.
+    r.state = !r.beat || r.age > STALE ? "down" : r.beat.restoring ? "restoring" : r.lag <= 2 && r.p2p?.open ? "ok" : "degraded";
   }
   return { tip, rows };
 }
