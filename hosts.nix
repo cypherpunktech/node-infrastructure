@@ -111,7 +111,7 @@
     hostKey = "";
     ipv4 = "34.104.226.177";
     mac = "42:01:0a:92:00:02";
-    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
     storage = "pruned";
     slot = 16;
   };
@@ -126,7 +126,7 @@
     hostKey = "";
     ipv4 = "35.244.47.80";
     mac = "42:01:0a:a0:00:02";
-    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
     storage = "pruned";
     slot = 18;
   };
@@ -141,7 +141,7 @@
     hostKey = "";
     ipv4 = "34.151.153.36";
     mac = "42:01:0a:98:00:02";
-    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
     storage = "pruned";
     slot = 20;
   };
@@ -156,7 +156,7 @@
     hostKey = "";
     ipv4 = "34.35.70.171";
     mac = "42:01:0a:da:00:02";
-    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
     storage = "pruned";
     slot = 22;
   };
@@ -171,7 +171,7 @@
     hostKey = "";
     ipv4 = "34.185.255.47";
     mac = "42:01:0a:9c:00:02";
-    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
     storage = "pruned";
     slot = 0;
   };
@@ -186,7 +186,7 @@
     hostKey = "";
     ipv4 = "34.130.110.3";
     mac = "42:01:0a:bc:00:02";
-    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
     storage = "pruned";
     slot = 2;
   };
@@ -201,7 +201,7 @@
     hostKey = "";
     ipv4 = "34.39.40.194";
     mac = "42:01:0a:9a:00:02";
-    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
     storage = "pruned";
     slot = 4;
   };
@@ -216,7 +216,7 @@
     hostKey = "";
     ipv4 = "34.92.10.23";
     mac = "42:01:0a:aa:00:02";
-    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
     storage = "pruned";
     slot = 7;
   };
@@ -231,7 +231,7 @@
     hostKey = "";
     ipv4 = "34.18.77.126";
     mac = "42:01:0a:d4:00:02";
-    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
     storage = "pruned";
     slot = 9;
   };
@@ -246,7 +246,7 @@
     hostKey = "";
     ipv4 = "34.51.89.91";
     mac = "42:01:0a:e0:00:02";
-    disk = "/dev/disk/by-id/google-persistent-disk-0";
+    disk = "/dev/disk/by-id/scsi-0Google_PersistentDisk_persistent-disk-0";
     storage = "pruned";
     slot = 11;
   };
