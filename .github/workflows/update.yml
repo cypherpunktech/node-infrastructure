@@ -1,16 +1,19 @@
-# Bumps the flake's inputs, zcash.nix first among them, and lands the bump
-# on main once every host's system builds from it. Nodes pull main at their
-# hour in hosts.nix, so this is how a Zakura release reaches the fleet.
+# Bumps the flake's inputs and lands the bump on main once every host's
+# system builds from it. Nodes pull main at their hour in hosts.nix, so this
+# is how a Zakura release reaches the fleet.
 #
-# 05:23 UTC: after zcash.nix's own daily bump has had time to merge, before
-# the first node's 06:00 slot. No gate but the build: a bump that fails to
-# build never lands, and one that builds but misbehaves reaches the first
-# slot's nodes before the rest, and is reverted on main.
+# Hourly, and zcash.nix is pinned to the newest commit on its main that
+# passed check.yml there, not merely the newest commit: that run is what
+# pins its binaries in Cachix, so a node never finds zakura missing from the
+# cache and compiles it. A release thus lands within the hour after
+# zcash.nix merges it, rather than at the next day's run. No gate but the
+# build: one that builds but misbehaves reaches the first slot's nodes
+# before the rest, and is reverted on main.
 name: update
 
 on:
   schedule:
-    - cron: "23 5 * * *"
+    - cron: "23 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -29,8 +32,14 @@ jobs:
 
       - name: Bump
         id: bump
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
+          green=$(gh run list -R cypherpunktech/zcash.nix --workflow check.yml --branch main \
+            --event push --status success --limit 1 --json headSha --jq '.[0].headSha')
+          [ -n "$green" ] || { echo "::error::no green check.yml run on zcash.nix main"; exit 1; }
           nix flake update 2>&1 | tee update.log
+          nix flake lock --override-input zcash-nix "github:cypherpunktech/zcash.nix/$green" 2>&1 | tee -a update.log
           if git diff --quiet flake.lock; then
             echo "nothing to update"; exit 0
           fi
