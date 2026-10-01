@@ -101,8 +101,10 @@ async function status(env) {
     // minutes for 2% of blocks), not this node, and flipped every node to
     // degraded at once.
     // Starting: its daily upgrade or a restart has Zakura reopening its
-    // database, which takes a minute or two; the heartbeat says since when.
-    r.state = !r.beat || r.age > STALE ? "down" : r.beat.restoring ? "restoring" : r.beat.height == null && r.beat.up < 300 ? "starting" : r.lag <= 2 && r.p2p?.open ? "ok" : "degraded";
+    // database, which takes minutes on an archive node; the heartbeat says
+    // since when. The port probe runs every five minutes and records only
+    // changes, so it can still say closed for a while after Zakura is back.
+    r.state = !r.beat || r.age > STALE ? "down" : r.beat.restoring ? "restoring" : r.beat.up < 600 && (r.beat.height == null || !r.p2p?.open) ? "starting" : r.lag <= 2 && r.p2p?.open ? "ok" : "degraded";
   }
   return { tip, rows };
 }
