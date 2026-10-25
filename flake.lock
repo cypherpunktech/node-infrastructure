@@ -86,11 +86,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1792835084,
-        "narHash": "sha256-27QK7E+IQCzXRGJD8kl2u5WJtjxUhSwtU3spRlimKlE=",
+        "lastModified": 1792919505,
+        "narHash": "sha256-gZGtGqeegqDcqoYb/8KutVsQLyoLJmOsr5vhYI0kua0=",
         "owner": "cypherpunktech",
         "repo": "zcash.nix",
-        "rev": "e7bd5963e0dd3cfbde2ad0c4c47bf3463c10c71c",
+        "rev": "890f04d861c956296b4ab29f286ed97b81fd4d9f",
         "type": "github"
       },
       "original": {
