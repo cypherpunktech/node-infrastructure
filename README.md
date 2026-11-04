@@ -7,7 +7,7 @@
 
 Cypherpunk's [Zakura](https://zakura.com) nodes on the [Zcash](https://z.cash) network, as one NixOS flake.
 
-Status: [nodes.cypherpunk-fleet.workers.dev](https://nodes.cypherpunk-fleet.workers.dev)
+Status: [infra.cypherpunk.com](https://infra.cypherpunk.com)
 
 | File         | What it is                                                                 |
 | ------------ | -------------------------------------------------------------------------- |

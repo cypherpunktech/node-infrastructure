@@ -1,0 +1,9 @@
+# Pages accepts a domain whose DNS lives outside Cloudflare; a Worker doesn't.
+# This project is only that door: infra.cypherpunk.com -> the "nodes" Worker.
+name = "cypherpunk-infra"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-09-01"
+
+[[services]]
+binding = "NODES"
+service = "nodes"
