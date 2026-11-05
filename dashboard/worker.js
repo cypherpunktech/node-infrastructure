@@ -241,7 +241,7 @@ h1{font:700 clamp(40px,8vw,88px)/1 "New Science","Arial Black",sans-serif;letter
 .pin circle{fill:var(--neon)}.pin text{fill:var(--neon);font-size:1.5px;letter-spacing:.05em}
 .pin .ring{fill:none;stroke:var(--neon);stroke-width:.2;animation:pulse 2s ease-out infinite;transform-box:fill-box;transform-origin:center}
 .pin.down circle,.pin.jailed circle{fill:var(--bad)}.pin.down .ring,.pin.jailed .ring{stroke:var(--bad)}.pin.down text,.pin.jailed text{fill:var(--bad)}
-.pin.restoring circle,.pin.starting circle,.pin.degraded circle,.pin.pending circle,.pin.syncing circle{fill:var(--white)}.pin.restoring .ring,.pin.degraded .ring,.pin.pending .ring,.pin.syncing .ring{stroke:var(--white)}.pin.restoring text,.pin.degraded text,.pin.pending text,.pin.syncing text{fill:var(--white)}
+.pin.restoring circle,.pin.starting circle,.pin.degraded circle,.pin.syncing circle{fill:var(--white)}.pin.restoring .ring,.pin.degraded .ring,.pin.syncing .ring{stroke:var(--white)}.pin.restoring text,.pin.degraded text,.pin.syncing text{fill:var(--white)}
 @keyframes pulse{from{transform:scale(1);opacity:1}to{transform:scale(3);opacity:0}}
 @media (prefers-reduced-motion:reduce){.pin .ring{animation:none}}
 .wrap{overflow-x:auto;border:1px solid var(--line)}
