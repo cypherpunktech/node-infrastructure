@@ -193,5 +193,9 @@ in
     flake = "github:cypherpunktech/node-infrastructure#${name}";
     dates = "*-*-* ${lib.fixedWidthNumber 2 host.slot}:00:00 UTC";
     randomizedDelaySec = "30min";
+    # Installing a kernel patches nothing until it boots: nodes once ran a
+    # fixed kernel for weeks with the vulnerable one still loaded. Reboots only
+    # when the kernel or initrd changed, in this host's staggered slot.
+    allowReboot = true;
   };
 }
