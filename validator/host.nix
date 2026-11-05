@@ -2,7 +2,7 @@
 # upgrade scripts are Valar's and assume a mutable system. The dashboard reads
 # this the way it reads hosts.nix.
 {
-  vote = {
+  benaloh = {
     location = "Amsterdam, NL";
     coordinates = [ 52.37 4.9 ];
     ipv4 = "95.179.133.138";

@@ -13,7 +13,7 @@ body=$(jq -nc \
   --argjson a "$(get 26657/abci_info)" \
   --argjson v "$(get "1317/cosmos/staking/v1beta1/validators/$valoper")" \
   --arg disk "$(df --output=pcent / | tail -1 | tr -d ' ')" \
-  '$s.result.sync_info as $i | {host: "vote", time: (now | floor), disk: $disk,
+  '$s.result.sync_info as $i | {host: "benaloh", time: (now | floor), disk: $disk,
     height: (($i.latest_block_height | tonumber)? // null),
     blockTime: (($i.latest_block_time | sub("\\.[0-9]+Z$"; "Z") | fromdate)? // null),
     catchingUp: ($i.catching_up // false),
