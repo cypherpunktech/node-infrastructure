@@ -15,6 +15,7 @@ Status: [infra.cypherpunk.com](https://infra.cypherpunk.com)
 | `node.nix`   | What every node runs: Zakura from [zcash.nix](https://github.com/cypherpunktech/zcash.nix), SSH, heartbeat, updates. |
 | `disk.nix`   | Disk layout.                                                               |
 | `dashboard/` | The status page, a Cloudflare Worker fed by heartbeats each node signs.    |
+| `validator/` | The Shielded Vote validator: a Debian VM, with its runbook.                 |
 
 Every hour a job bumps the flake's inputs, zcash.nix to its newest commit that passed CI, and
 lands the bump once every host builds. Nodes pull `main` at their hour in `hosts.nix` and switch to it; reverting a commit

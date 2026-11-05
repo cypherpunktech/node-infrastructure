@@ -40,6 +40,8 @@
       # What the dashboard needs to know about each host: dashboard/deploy.sh.
       # A host joins it once installed, when its host key is known and its
       # heartbeats can be checked.
+      dashboardValidators = import ./validator/host.nix;
+
       dashboardHosts = builtins.mapAttrs (_: h: {
         inherit (h)
           location

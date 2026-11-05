@@ -4,11 +4,13 @@
 // node's P2P port from outside, which a node cannot vouch for itself.
 import { connect } from "cloudflare:sockets";
 import hosts from "./hosts.json";
+import validators from "./validators.json";
 import land from "./land.json";
 
 const NAMESPACE = "fleet-heartbeat";
 const MAX_SKEW = 300; // seconds a heartbeat may be old, so one cannot be replayed later
 const STALE = 180; // seconds without a heartbeat before a node counts as silent
+const STUCK = 120; // seconds since a validator's last block; its chain makes one every few seconds
 
 const enc = new TextEncoder();
 const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
@@ -54,7 +56,7 @@ async function verify(host, body, armored) {
 async function beat(request, env) {
   const { body, sig } = await request.json();
   const data = JSON.parse(body);
-  const host = hosts[data.host];
+  const host = hosts[data.host] ?? validators[data.host];
   if (!host) return new Response("unknown host", { status: 403 });
   try {
     await verify(host, body, sig);
@@ -79,15 +81,33 @@ async function probe(ip, port) {
   }
 }
 
+// Is the public URL serving, seen from outside: DNS, certificate, Caddy, helper API.
+async function serving(url) {
+  try {
+    const r = await fetch(`${url}/shielded-vote/v1/rounds`, { signal: AbortSignal.timeout(5000) });
+    r.body?.cancel();
+    return r.ok;
+  } catch {
+    return false;
+  }
+}
+
 async function status(env) {
   const now = Date.now() / 1000;
-  const rows = await Promise.all(
-    Object.entries(hosts).map(async ([name, h]) => {
-      const beat = JSON.parse((await env.FLEET.get(`beat:${name}`)) || "null");
-      const p2p = JSON.parse((await env.FLEET.get(`probe:${name}`)) || "null");
-      return { name, ...h, beat, p2p, age: beat ? Math.round(now - beat.time) : null };
-    }),
-  );
+  const load = (group) =>
+    Promise.all(
+      Object.entries(group).map(async ([name, h]) => {
+        const beat = JSON.parse((await env.FLEET.get(`beat:${name}`)) || "null");
+        const p2p = JSON.parse((await env.FLEET.get(`probe:${name}`)) || "null");
+        return { name, ...h, beat, p2p, age: beat ? Math.round(now - beat.time) : null };
+      }),
+    );
+  const [rows, vals] = await Promise.all([load(hosts), load(validators)]);
+  // Pending: healthy and waiting to be funded and bonded, so not yet signing.
+  for (const v of vals) {
+    const b = v.beat;
+    v.state = !b || v.age > STALE ? "down" : b.catchingUp ? "syncing" : now - b.blockTime > STUCK || !v.p2p?.open || !v.p2p?.https ? "degraded" : b.jailed ? "jailed" : b.bond === "BOND_STATUS_BONDED" ? "ok" : "pending";
+  }
   const tip = Math.max(0, ...rows.map((r) => r.beat?.height ?? 0));
   // Lag against the tip as the fleet knew it when this node reported, not
   // against whatever arrived since: heartbeats are a minute apart, and a
@@ -106,7 +126,7 @@ async function status(env) {
     // changes, so it can still say closed for a while after Zakura is back.
     r.state = !r.beat || r.age > STALE ? "down" : r.beat.restoring ? "restoring" : r.beat.up < 600 && (r.beat.height == null || !r.p2p?.open) ? "starting" : r.lag <= 2 && r.p2p?.open ? "ok" : "degraded";
   }
-  return { tip, rows };
+  return { tip, rows, validators: vals };
 }
 
 const esc = (v) => String(v ?? "—").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -176,7 +196,11 @@ function map(rows) {
 <path class="land" d="${dots}"/>${pins}</svg>`;
 }
 
-function page({ tip, rows }) {
+const kicker = (title) =>
+  `<div class="kicker">// ${title}<svg viewBox="0 0 360 24" aria-hidden="true"><path d="M0 4H280L340 20" fill="none" stroke="#0ce700"/><rect x="336" y="16" width="8" height="8" fill="#0ce700"/></svg></div>`;
+const BOND = { BOND_STATUS_BONDED: "bonded", BOND_STATUS_UNBONDING: "unbonding", BOND_STATUS_UNBONDED: "unbonded" };
+
+function page({ tip, rows, validators }) {
   const healthy = rows.filter((r) => r.state === "ok").length;
   const versions = [...new Set(rows.map((r) => r.beat?.version).filter(Boolean))].join(", ") || "—";
   const tr = rows
@@ -185,6 +209,14 @@ function page({ tip, rows }) {
 <td><span class="dot"></span>${esc(r.state)}</td><td class="n">${num(r.beat?.height)}</td><td class="n">${esc(r.lag)}</td>
 <td class="n">${esc(r.beat?.peers)}</td><td>${r.p2p ? (r.p2p.open ? "open" : "closed") : "—"}</td>
 <td>${esc(r.beat?.version)}</td><td class="n">${esc(r.beat?.disk)}</td><td>${esc(ago(r.age))}</td></tr>`,
+    )
+    .join("");
+  const vr = validators
+    .map(
+      (v) => `<tr class="${v.state}"><td><b>${esc(v.name)}</b><small>${esc(v.location)} · ${esc(v.storage)}</small></td>
+<td><span class="dot"></span>${esc(v.state)}</td><td class="n">${num(v.beat?.height)}</td><td>${esc(BOND[v.beat?.bond] ?? "not bonded")}</td><td class="n">${num(v.beat?.power)}</td>
+<td class="n">${esc(v.beat?.peers)}</td><td>${v.p2p ? (v.p2p.open ? "open" : "closed") : "—"}</td><td>${v.p2p ? (v.p2p.https ? "serving" : "failing") : "—"}</td>
+<td>${esc(v.beat?.version)}</td><td class="n">${esc(v.beat?.disk)}</td><td>${esc(ago(v.age))}</td></tr>`,
     )
     .join("");
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -209,8 +241,8 @@ h1{font:700 clamp(40px,8vw,88px)/1 "New Science","Arial Black",sans-serif;letter
 .land{stroke:#1f4d1f;stroke-width:.5;stroke-linecap:round}
 .pin circle{fill:var(--neon)}.pin text{fill:var(--neon);font-size:1.5px;letter-spacing:.05em}
 .pin .ring{fill:none;stroke:var(--neon);stroke-width:.2;animation:pulse 2s ease-out infinite;transform-box:fill-box;transform-origin:center}
-.pin.down circle{fill:var(--bad)}.pin.down .ring{stroke:var(--bad)}.pin.down text{fill:var(--bad)}
-.pin.restoring circle,.pin.starting circle,.pin.degraded circle{fill:var(--white)}.pin.restoring .ring,.pin.degraded .ring{stroke:var(--white)}.pin.restoring text,.pin.degraded text{fill:var(--white)}
+.pin.down circle,.pin.jailed circle{fill:var(--bad)}.pin.down .ring,.pin.jailed .ring{stroke:var(--bad)}.pin.down text,.pin.jailed text{fill:var(--bad)}
+.pin.restoring circle,.pin.starting circle,.pin.degraded circle,.pin.pending circle,.pin.syncing circle{fill:var(--white)}.pin.restoring .ring,.pin.degraded .ring,.pin.pending .ring,.pin.syncing .ring{stroke:var(--white)}.pin.restoring text,.pin.degraded text,.pin.pending text,.pin.syncing text{fill:var(--white)}
 @keyframes pulse{from{transform:scale(1);opacity:1}to{transform:scale(3);opacity:0}}
 @media (prefers-reduced-motion:reduce){.pin .ring{animation:none}}
 .wrap{overflow-x:auto;border:1px solid var(--line)}
@@ -218,19 +250,21 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:14px 16p
 tr:last-child td{border-bottom:0}th{color:var(--mut);font-weight:400;font-size:11px;letter-spacing:.14em}
 td small{display:block;color:var(--mut);font-size:11px}td b{font-weight:400;color:var(--neon)}.n{text-align:right;font-variant-numeric:tabular-nums}
 .dot{display:inline-block;width:8px;height:8px;margin-right:8px;background:var(--neon)}
-.down .dot{background:var(--bad)}.restoring .dot,.starting .dot,.degraded .dot{background:var(--white)}
+.down .dot,.jailed .dot{background:var(--bad)}.restoring .dot,.starting .dot,.degraded .dot,.pending .dot,.syncing .dot{background:var(--white)}
 .note{color:var(--mut);margin:0 0 12px}
 pre{margin:0;padding:16px 20px;border:1px solid var(--line);background:var(--dark);color:var(--neon);text-transform:none;overflow-x:auto;user-select:all}
 footer{display:flex;align-items:center;justify-content:space-between;color:var(--mut);font-size:11px;letter-spacing:.14em;margin-top:24px}
 </style></head><body><main>
 <header><a href="https://cypherpunk.com"><img src="/wordmark.svg" alt="./cypherpunk"></a><a class="nav" href="https://cypherpunk.com">cypherpunk.com ↗</a></header>
-<div class="kicker">// Zakura nodes<svg viewBox="0 0 360 24" aria-hidden="true"><path d="M0 4H280L340 20" fill="none" stroke="#0ce700"/><rect x="336" y="16" width="8" height="8" fill="#0ce700"/></svg></div>
+${kicker("Zakura nodes")}
 <h1>Cypherpunk infra</h1>
 <div class="stats"><div><small>Nodes healthy</small><b>${healthy}/${rows.length}</b></div><div><small>Fleet tip</small><b>#${num(tip)}</b></div>
 <div><small>Client</small><b>${esc(versions)}</b></div><div><small>P2P</small><b>v1 + v2</b></div></div>
-<div class="map">${map(rows)}</div>
+<div class="map">${map([...rows, ...validators])}</div>
 <div class="wrap"><table><tr><th>Node</th><th>State</th><th class="n">Height</th><th class="n">Lag</th><th class="n">Peers</th><th>P2P port</th><th>Version</th><th class="n">Disk</th><th>Heartbeat</th></tr>${tr}</table></div>
-<div class="kicker">// Peer with us<svg viewBox="0 0 360 24" aria-hidden="true"><path d="M0 4H280L340 20" fill="none" stroke="#0ce700"/><rect x="336" y="16" width="8" height="8" fill="#0ce700"/></svg></div>
+${kicker("Shielded Vote")}
+<div class="wrap"><table><tr><th>Validator</th><th>State</th><th class="n">Height</th><th>Bond</th><th class="n">Power</th><th class="n">Peers</th><th>P2P port</th><th>Public API</th><th>Version</th><th class="n">Disk</th><th>Heartbeat</th></tr>${vr}</table></div>
+${kicker("Peer with us")}
 <p class="note">Add our Zakura node cluster to your node's peers:</p>
 <pre>${esc(rows.flatMap((r) => [`${r.ipv4}:8233`, ...(r.ipv6 ? [`[${r.ipv6}]:8233`] : [])]).join("\n"))}</pre>
 <footer><span>Refreshes every 30s</span><a class="nav gh" href="https://github.com/cypherpunktech/node-infrastructure" aria-label="Source on GitHub"><svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></footer>
@@ -249,12 +283,13 @@ export default {
   // that finds what the last one found says nothing new. `time` is when the
   // state began, not when it was last confirmed.
   async scheduled(_event, env) {
-    await Promise.all(
-      Object.entries(hosts).map(async ([name, h]) => {
-        const open = await probe(h.ipv4, 8233);
-        const last = JSON.parse((await env.FLEET.get(`probe:${name}`)) || "null");
-        if (last?.open !== open) await env.FLEET.put(`probe:${name}`, JSON.stringify({ open, time: Math.round(Date.now() / 1000) }));
-      }),
-    );
+    const record = async (name, seen) => {
+      const last = JSON.parse((await env.FLEET.get(`probe:${name}`)) || "null");
+      if (Object.keys(seen).some((k) => last?.[k] !== seen[k])) await env.FLEET.put(`probe:${name}`, JSON.stringify({ ...seen, time: Math.round(Date.now() / 1000) }));
+    };
+    await Promise.all([
+      ...Object.entries(hosts).map(async ([name, h]) => record(name, { open: await probe(h.ipv4, 8233) })),
+      ...Object.entries(validators).map(async ([name, v]) => record(name, { open: await probe(v.ipv4, 26656), https: await serving(v.url) })),
+    ]);
   },
 };
