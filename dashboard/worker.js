@@ -106,7 +106,7 @@ async function status(env) {
   // Pending: healthy and waiting to be funded and bonded, so not yet signing.
   for (const v of vals) {
     const b = v.beat;
-    v.state = !b || v.age > STALE ? "down" : b.catchingUp ? "syncing" : now - b.blockTime > STUCK || !v.p2p?.open || !v.p2p?.https ? "degraded" : b.jailed ? "jailed" : b.bond === "BOND_STATUS_BONDED" ? "ok" : "pending";
+    v.state = !b || v.age > STALE ? "down" : b.catchingUp ? "syncing" : b.time - b.blockTime > STUCK || !v.p2p?.open || !v.p2p?.https ? "degraded" : b.jailed ? "jailed" : b.bond === "BOND_STATUS_BONDED" ? "ok" : "pending";
   }
   const tip = Math.max(0, ...rows.map((r) => r.beat?.height ?? 0));
   // Lag against the tip as the fleet knew it when this node reported, not

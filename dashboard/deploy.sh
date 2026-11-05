@@ -3,6 +3,9 @@
 # e.g. from ~/.config/cloudflare.env; hosts.json is generated, never edited.
 set -euo pipefail
 cd "$(dirname "$0")"
+# A deploy replaces every asset, and this licensed font is not in the repository:
+# without the local copy, it would silently vanish from the live page.
+[ -f public/fonts/new-science-bold.woff2 ] || { echo "missing public/fonts/new-science-bold.woff2" >&2; exit 1; }
 nix eval --json ..#dashboardHosts > hosts.json
 nix eval --json ..#dashboardValidators > validators.json
 # A Global API Key in the environment outranks the token for wrangler, and
