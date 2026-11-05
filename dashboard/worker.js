@@ -198,7 +198,6 @@ function map(rows) {
 
 const kicker = (title) =>
   `<div class="kicker">// ${title}<svg viewBox="0 0 360 24" aria-hidden="true"><path d="M0 4H280L340 20" fill="none" stroke="#0ce700"/><rect x="336" y="16" width="8" height="8" fill="#0ce700"/></svg></div>`;
-const BOND = { BOND_STATUS_BONDED: "bonded", BOND_STATUS_UNBONDING: "unbonding", BOND_STATUS_UNBONDED: "unbonded" };
 
 function page({ tip, rows, validators }) {
   const healthy = rows.filter((r) => r.state === "ok").length;
@@ -213,8 +212,8 @@ function page({ tip, rows, validators }) {
     .join("");
   const vr = validators
     .map(
-      (v) => `<tr class="${v.state}"><td><b>${esc(v.name)}</b><small>${esc(v.location)} · ${esc(v.storage)}</small></td>
-<td><span class="dot"></span>${esc(v.state)}</td><td class="n">${num(v.beat?.height)}</td><td>${esc(BOND[v.beat?.bond] ?? "not bonded")}</td><td class="n">${num(v.beat?.power)}</td>
+      (v) => `<tr class="${v.state}"><td><b>${esc(v.name)}</b><small>${esc(v.location)}</small></td>
+<td><span class="dot"></span>${esc(v.state)}</td><td class="n">${num(v.beat?.height)}</td><td class="n">${num(v.beat?.power)}</td>
 <td class="n">${esc(v.beat?.peers)}</td><td>${v.p2p ? (v.p2p.open ? "open" : "closed") : "—"}</td><td>${v.p2p ? (v.p2p.https ? "serving" : "failing") : "—"}</td>
 <td>${esc(v.beat?.version)}</td><td class="n">${esc(v.beat?.disk)}</td><td>${esc(ago(v.age))}</td></tr>`,
     )
@@ -246,7 +245,7 @@ h1{font:700 clamp(40px,8vw,88px)/1 "New Science","Arial Black",sans-serif;letter
 @keyframes pulse{from{transform:scale(1);opacity:1}to{transform:scale(3);opacity:0}}
 @media (prefers-reduced-motion:reduce){.pin .ring{animation:none}}
 .wrap{overflow-x:auto;border:1px solid var(--line)}
-table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:14px 16px;border-bottom:1px solid #0ce70026;white-space:nowrap}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:14px 12px;border-bottom:1px solid #0ce70026;white-space:nowrap}
 tr:last-child td{border-bottom:0}th{color:var(--mut);font-weight:400;font-size:11px;letter-spacing:.14em}
 td small{display:block;color:var(--mut);font-size:11px}td b{font-weight:400;color:var(--neon)}.n{text-align:right;font-variant-numeric:tabular-nums}
 .dot{display:inline-block;width:8px;height:8px;margin-right:8px;background:var(--neon)}
@@ -263,7 +262,7 @@ ${kicker("Zakura nodes")}
 <div class="map">${map([...rows, ...validators])}</div>
 <div class="wrap"><table><tr><th>Node</th><th>State</th><th class="n">Height</th><th class="n">Lag</th><th class="n">Peers</th><th>P2P port</th><th>Version</th><th class="n">Disk</th><th>Heartbeat</th></tr>${tr}</table></div>
 ${kicker("Shielded Vote")}
-<div class="wrap"><table><tr><th>Validator</th><th>State</th><th class="n">Height</th><th>Bond</th><th class="n">Power</th><th class="n">Peers</th><th>P2P port</th><th>Public API</th><th>Version</th><th class="n">Disk</th><th>Heartbeat</th></tr>${vr}</table></div>
+<div class="wrap"><table><tr><th>Validator</th><th>State</th><th class="n">Height</th><th class="n">Power</th><th class="n">Peers</th><th>P2P port</th><th>Public API</th><th>Version</th><th class="n">Disk</th><th>Heartbeat</th></tr>${vr}</table></div>
 ${kicker("Peer with us")}
 <p class="note">Add our Zakura node cluster to your node's peers:</p>
 <pre>${esc(rows.flatMap((r) => [`${r.ipv4}:8233`, ...(r.ipv6 ? [`[${r.ipv6}]:8233`] : [])]).join("\n"))}</pre>
