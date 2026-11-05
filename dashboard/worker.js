@@ -231,7 +231,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;bo
 header img{height:18px;display:block}.nav{display:flex;color:var(--neon);text-decoration:none;white-space:nowrap}.nav:hover{text-decoration:underline}.gh{color:var(--white)}.gh:hover{color:var(--neon)}
 .kicker{display:flex;align-items:center;gap:16px;color:var(--neon);margin:56px 0 8px}
 .kicker svg{width:min(360px,50vw);height:24px}
-h1{font:700 clamp(40px,8vw,88px)/1 "New Science","Arial Black",sans-serif;letter-spacing:-.01em;margin:0 0 40px}
+h1{font:700 clamp(40px,8vw,88px)/1 "New Science","Arial Black",sans-serif;letter-spacing:-.01em;margin:56px 0 40px}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--line)}
 .stats div{padding:16px 20px;border-right:1px solid var(--line)}.stats div:last-child{border-right:0}
 .stats small{display:block;color:var(--mut);font-size:11px;letter-spacing:.14em}.stats b{color:var(--neon);font-weight:400;font-size:16px}
@@ -255,11 +255,11 @@ pre{margin:0;padding:16px 20px;border:1px solid var(--line);background:var(--dar
 footer{display:flex;align-items:center;justify-content:space-between;color:var(--mut);font-size:11px;letter-spacing:.14em;margin-top:24px}
 </style></head><body><main>
 <header><a href="https://cypherpunk.com"><img src="/wordmark.svg" alt="./cypherpunk"></a><a class="nav" href="https://cypherpunk.com">cypherpunk.com ↗</a></header>
-${kicker("Zakura nodes")}
 <h1>Cypherpunk infra</h1>
 <div class="stats"><div><small>Nodes healthy</small><b>${healthy}/${rows.length}</b></div><div><small>Fleet tip</small><b>#${num(tip)}</b></div>
 <div><small>Client</small><b>${esc(versions)}</b></div><div><small>P2P</small><b>v1 + v2</b></div></div>
 <div class="map">${map([...rows, ...validators])}</div>
+${kicker("Zakura nodes")}
 <div class="wrap"><table><tr><th>Node</th><th>State</th><th class="n">Height</th><th class="n">Lag</th><th class="n">Peers</th><th>P2P port</th><th>Version</th><th class="n">Disk</th><th>Heartbeat</th></tr>${tr}</table></div>
 ${kicker("Shielded Vote")}
 <div class="wrap"><table><tr><th>Validator</th><th>State</th><th class="n">Height</th><th class="n">Power</th><th class="n">Peers</th><th>P2P port</th><th>Public API</th><th>Version</th><th class="n">Disk</th><th>Heartbeat</th></tr>${vr}</table></div>
