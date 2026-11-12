@@ -198,4 +198,13 @@ in
     # when the kernel or initrd changed, in this host's staggered slot.
     allowReboot = true;
   };
+  # Each upgrade adds a system to the store and nothing removed the old ones:
+  # dai ran out of inodes with 8.8 GB still free and failed its upgrade to
+  # zakura 1.8.7. Rollback is reverting a commit, not booting an old
+  # generation, so two weeks of them is plenty.
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 14d";
+  };
 }
